@@ -15,6 +15,7 @@ class SummaryScreen extends StatefulWidget {
 class _SummaryScreenState extends State<SummaryScreen> {
 
   ResultController controller = ResultController();
+  bool isLoading = false;
 
 
   @override
@@ -24,6 +25,16 @@ class _SummaryScreenState extends State<SummaryScreen> {
       Navigator.pop(context);
     }
     super.initState();
+  }
+
+  Future<void> getQuestion(String difficulty)async{
+    setState(() {
+      isLoading=true;
+    });
+    await controller.generateQuestion(difficulty);
+    setState(() {
+      isLoading=false;
+    });
   }
 
 
@@ -53,7 +64,9 @@ class _SummaryScreenState extends State<SummaryScreen> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
+      body: isLoading
+      ?const Center(child: CircularProgressIndicator())
+      :SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(20),
           child: Column(
@@ -188,11 +201,15 @@ class _SummaryScreenState extends State<SummaryScreen> {
     required String subtitle,
     required IconData icon,
     required Color color,
-    required DifficultySet difficulty,
+    required DifficultySet? difficulty,
   }) {
     return InkWell(
       borderRadius: BorderRadius.circular(18),
       onTap: () {
+        if(difficulty==null){
+          getQuestion(title);
+          return;
+        }
         Navigator.push(
           context,
           MaterialPageRoute(

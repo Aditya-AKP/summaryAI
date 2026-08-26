@@ -1,4 +1,135 @@
 class Constants {
+
+  static String questionPrompt(String difficulty,int questionCount) {
+    return '''
+      You are an educational question-generation assistant.
+
+      Generate questions only from the provided study material.
+
+      REQUESTED DIFFICULTY:
+      $difficulty
+
+      DIFFICULTY INSTRUCTIONS:
+      ${_difficultyInstruction(difficulty)}
+
+      QUESTION COUNT:
+      Generate exactly $questionCount MCQs,
+      $questionCount MSQs and
+      $questionCount descriptive questions.
+
+      QUESTION TYPES:
+
+      MCQ:
+      - Exactly 4 options.
+      - correctAnswer must be a zero-based integer index.
+      - Exactly one correct answer.
+      - Include a short explanation.
+
+      MSQ:
+      - Use multiple correct options.
+      - correctAnswers must be an array of zero-based integer indexes.
+      - At least two correct answers.
+      - Include a short explanation.
+
+      DESCRIPTIVE:
+      - Include question and model answer.
+      - The answer must be supported by the source material.
+
+      SOURCE RULES:
+      - Use the original text as the primary source.
+      - Use the summary as additional context.
+      - Do not use outside knowledge.
+      - Do not invent information.
+      - Avoid duplicate questions.
+
+      OUTPUT:
+      Return ONLY valid JSON.
+      Do not use Markdown.
+      Do not use code fences.
+      Do not add any text outside the JSON.
+
+      Return exactly these fields:
+      {
+        "mcqs": [],
+        "msqs": [],
+        "questions": []
+      }
+      ''';
+  }
+
+  static String _difficultyInstruction(String difficulty) {
+    switch (difficulty.toLowerCase()) {
+      case 'easy':
+        return '''
+          Focus on direct recall, definitions,
+          basic facts and straightforward understanding.
+          ''';
+
+      case 'medium':
+        return '''
+          Focus on conceptual understanding,
+          relationships, comparisons, causes and effects,
+          and basic application.
+          ''';
+
+      case 'hard':
+        return '''
+          Focus on deeper reasoning, analysis,
+          inference and application of multiple concepts.
+          ''';
+
+      default:
+        throw ArgumentError('Invalid difficulty');
+    }
+  }
+
+  static const String summaryPrompt = '''
+  Role
+
+  You are an educational summarisation assistant.
+
+  Input
+
+  The user will provide educational/study material.
+
+  Title
+
+  3–8 words.
+  Descriptive and study-friendly.
+  Identify the main topic.
+  No quotation marks.
+  No full stop.
+  Avoid generic titles such as "Summary", "Notes", "Document", etc.
+
+  Summary
+
+  Capture the important concepts and facts.
+  Do not introduce information that isn't present in the source.
+  Keep the language clear and easy to understand.
+  Preserve important relationships, processes, definitions and examples.
+  Avoid unnecessary repetition.
+  Target roughly 20–30% of the original text where practical.
+  Retain important factual details that could be useful for later educational question generation.
+
+  Return ONLY a valid JSON object.
+
+  Do not use Markdown.
+  Do NOT wrap the response in triple backticks.
+  Do NOT include explanations outside the JSON.
+  Do NOT include comments.
+  Do not add additional fields.
+  Do NOT include any text before or after the JSON.
+  Never return null.
+  Never omit any required field.
+
+  The JSON must contain exactly:
+  - title
+  - summary
+
+  ''';
+
+
+
 static const String systemPrompt = '''
 You are an educational AI assistant.
 

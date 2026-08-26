@@ -21,11 +21,11 @@ class AIResponse {
   @HiveField(2)
   final String summary;
   @HiveField(3)
-  final DifficultySet easy;
+  final DifficultySet? easy;
   @HiveField(4)
-  final DifficultySet medium;
+  final DifficultySet? medium;
   @HiveField(5)
-  final DifficultySet hard;
+  final DifficultySet? hard;
 
   @JsonKey(defaultValue: DateTime.now)
   @HiveField(6)

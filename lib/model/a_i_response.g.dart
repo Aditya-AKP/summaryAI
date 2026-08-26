@@ -18,9 +18,9 @@ class AIResponseAdapter extends TypeAdapter<AIResponse> {
     };
     return AIResponse(
       originalText: fields[1] as String,
-      easy: fields[3] as DifficultySet,
-      hard: fields[5] as DifficultySet,
-      medium: fields[4] as DifficultySet,
+      easy: fields[3] as DifficultySet?,
+      hard: fields[5] as DifficultySet?,
+      medium: fields[4] as DifficultySet?,
       summary: fields[2] as String,
       createdAt: fields[6] as DateTime,
       id: fields[0] as String,
@@ -67,9 +67,15 @@ class AIResponseAdapter extends TypeAdapter<AIResponse> {
 
 AIResponse _$AIResponseFromJson(Map<String, dynamic> json) => AIResponse(
   originalText: json['originalText'] as String? ?? '',
-  easy: DifficultySet.fromJson(json['easy'] as Map<String, dynamic>),
-  hard: DifficultySet.fromJson(json['hard'] as Map<String, dynamic>),
-  medium: DifficultySet.fromJson(json['medium'] as Map<String, dynamic>),
+  easy: json['easy'] == null
+      ? null
+      : DifficultySet.fromJson(json['easy'] as Map<String, dynamic>),
+  hard: json['hard'] == null
+      ? null
+      : DifficultySet.fromJson(json['hard'] as Map<String, dynamic>),
+  medium: json['medium'] == null
+      ? null
+      : DifficultySet.fromJson(json['medium'] as Map<String, dynamic>),
   summary: json['summary'] as String? ?? '',
   createdAt: json['createdAt'] == null
       ? DateTime.now()
